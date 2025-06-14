@@ -146,7 +146,7 @@
                     datasets: [{
                       label: '',
                       data: [],
-                      borderColor: 'rgba(0, 200, 255, 1)',
+                      borderColor: 'rgba(0, 200, 255, 0.5)',
                       backgroundColor: 'transparent',
                       pointRadius: 0,
                       borderWidth: 2,
@@ -168,14 +168,45 @@
 
                 // Update the plot as video plays
                 video.addEventListener("timeupdate", () => {
-                  const t = video.currentTime;
-                  const idx = time.findIndex(val => val > t);
-                  const clippedIdx = idx === -1 ? time.length : idx;
+                    const t = video.currentTime;
+                    const idx = time.findIndex(val => val > t);
+                    const clippedIdx = idx === -1 ? time.length : idx;
 
-                  chart.data.labels = time.slice(0, clippedIdx);
-                  chart.data.datasets[0].data = values.slice(0, clippedIdx);
-                  chart.update();
-                });
+                    // past values (line)
+                    const pastTime = time.slice(0, clippedIdx);
+                    const pastValues = values.slice(0, clippedIdx);
+
+                    // current point (last one shown)
+                    const currentTime = pastTime.at(-1);
+                    const currentValue = pastValues.at(-1);
+
+                    chart.data = {
+                    labels: pastTime,
+                    datasets: [
+                      {
+                        label: '',
+                        data: pastValues,
+                        borderColor: 'rgba(0, 200, 255, 0.6)',
+                        backgroundColor: 'transparent',
+                        pointRadius: 0,
+                        borderWidth: 2,
+                        tension: 0.2
+                      },
+                      {
+                        label: '',
+                        data: [{ x: currentTime, y: currentValue }],
+                        borderColor: 'transparent',
+                        backgroundColor: 'rgba(255, 50, 50, 1)',  // red dot
+                        pointRadius: 5,
+                        pointStyle: 'circle',
+                        showLine: false
+                      }
+                    ]
+                    };
+
+                    chart.update();
+                    });
+
             });
         </script>
     </body>

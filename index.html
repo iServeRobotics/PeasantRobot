@@ -121,58 +121,62 @@
               }
             });
         </script>
+        <!-- for force data overlay video, synced with video-->
         <script>
-            fetch('assets/force_x.csv')
-              .then(res => res.text())
-              .then(csv => {
-                const lines = csv.trim().split('\n').slice(1);
-                const time = [], values = [];
+        const video = document.getElementById("bg-video");
+        const canvas = document.getElementById("forceChart");
 
-                lines.forEach(line => {
-                  const [t, v] = line.split(',');
-                  time.push(parseFloat(t));
-                  values.push(parseFloat(v));
-                });
+        let time = [], values = [];
+        let chart;
 
-                new Chart(document.getElementById('forceChart'), {
-                  type: 'line',
-                  data: {
-                    labels: time,
-                    datasets: [{
-                      label: '',
-                      data: values,
-                      borderColor: 'rgba(0, 200, 255, 1)',     // line color
-                      backgroundColor: 'transparent',          // no area fill
-                      pointRadius: 0,                          // set >0 for dots only
-                      borderWidth: 2,
-                      tension: 0.2                              // smooth curve
-                    }]
-                  },
-                  options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                      legend: { display: false }
-                    },
-                    scales: {
-                      x: {
-                        display: false,
-                        grid: { display: false }
-                      },
-                      y: {
-                        display: false,
-                        grid: { display: false }
-                      }
-                    },
-                    layout: {
-                      padding: 0
-                    },
-                    elements: {
-                      line: { fill: false }
-                    }
-                  }
-                });
-              });
+        fetch("assets/force_x.csv")
+          .then(res => res.text())
+          .then(csv => {
+            const lines = csv.trim().split('\n').slice(1);
+            lines.forEach(line => {
+              const [t, v] = line.split(',');
+              time.push(parseFloat(t));
+              values.push(parseFloat(v));
+            });
+
+            chart = new Chart(canvas, {
+              type: 'line',
+              data: {
+                labels: [],
+                datasets: [{
+                  label: '',
+                  data: [],
+                  borderColor: 'rgba(0, 200, 255, 1)',
+                  backgroundColor: 'transparent',
+                  pointRadius: 0,
+                  borderWidth: 2,
+                  tension: 0.2
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                  x: { display: false, grid: { display: false } },
+                  y: { display: false, grid: { display: false } }
+                },
+                elements: { line: { fill: false } }
+              }
+            });
+
+            // Update the plot as video plays
+            video.addEventListener("timeupdate", () => {
+              const t = video.currentTime;
+              const idx = time.findIndex(val => val > t);
+              const clippedIdx = idx === -1 ? time.length : idx;
+
+              chart.data.labels = time.slice(0, clippedIdx);
+              chart.data.datasets[0].data = values.slice(0, clippedIdx);
+              chart.update();
+            });
+          });
         </script>
     </body>
 </html>

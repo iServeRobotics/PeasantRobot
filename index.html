@@ -232,7 +232,7 @@
               if (!isPaused && currentLine < lines.length) {
                 logOutput.textContent += lines[currentLine] + '\n';
                 currentLine++;
-                logOutput.scrollTop = logOutput.scrollHeight;
+                logContainer.scrollTop = logContainer.scrollHeight;
               }
             }, 200);  // adjust scroll speed here
           });

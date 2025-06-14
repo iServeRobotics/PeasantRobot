@@ -129,33 +129,54 @@
             let time = [], values = [];
             let chart;
 
-            chart = new Chart(canvas, {
-                type: 'line',
-                data: {
-                labels: [0, 1, 2, 3, 4],
-                datasets: [{
-                  label: '',
-                  data: [0.1, 0.3, 0.5, 0.2, 0.4],
-                  borderColor: 'rgba(0, 200, 255, 1)',
-                  backgroundColor: 'transparent',
-                  pointRadius: 0,
-                  borderWidth: 2,
-                  tension: 0.2
-                }]
-                },
-                options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                  x: { display: false, grid: { display: false } },
-                  y: { display: false, grid: { display: false } }
-                },
-                elements: { line: { fill: false } }
-                }
-            });
+            fetch("assets/force_x.csv")
+              .then(res => res.text())
+              .then(csv => {
+                const lines = csv.trim().split('\n').slice(1);
+                lines.forEach(line => {
+                  const [t, v] = line.split(',');
+                  time.push(parseFloat(t));
+                  values.push(parseFloat(v));
+                });
 
+                chart = new Chart(canvas, {
+                  type: 'line',
+                  data: {
+                    labels: [],
+                    datasets: [{
+                      label: '',
+                      data: [],
+                      borderColor: 'rgba(0, 200, 255, 1)',
+                      backgroundColor: 'transparent',
+                      pointRadius: 0,
+                      borderWidth: 2,
+                      tension: 0.2
+                    }]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                      x: { display: false, grid: { display: false } },
+                      y: { display: false, grid: { display: false } }
+                    },
+                    elements: { line: { fill: false } }
+                  }
+                });
+
+                // Update the plot as video plays
+                video.addEventListener("timeupdate", () => {
+                  const t = video.currentTime;
+                  const idx = time.findIndex(val => val > t);
+                  const clippedIdx = idx === -1 ? time.length : idx;
+
+                  chart.data.labels = time.slice(0, clippedIdx);
+                  chart.data.datasets[0].data = values.slice(0, clippedIdx);
+                  chart.update();
+                });
+            });
         </script>
     </body>
 </html>

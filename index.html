@@ -163,8 +163,34 @@
                     animation: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                      x: { display: false, grid: { display: false }, type: 'linear', min: 0, max:16 },
-                      y: { display: false, grid: { display: false }, type: 'linear', min: -1, max:1 }
+                      x: {
+                        type: 'linear',
+                        min: 0,
+                        max: 16,
+                        display: true,
+                        grid: {
+                          display: true,
+                          color: 'rgba(0, 0, 0, 0.1)'  // subtle grid lines
+                        },
+                        ticks: {
+                          color: '#333',
+                          font: { size: 10 }
+                        }
+                      },
+                      y: {
+                        type: 'linear',
+                        min: -1,
+                        max: 1,
+                        display: true,
+                        grid: {
+                          display: true,
+                          color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        ticks: {
+                          color: '#333',
+                          font: { size: 10 }
+                        }
+                      }
                     },
                     elements: { line: { fill: false } }
                   }

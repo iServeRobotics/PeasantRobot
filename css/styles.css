@@ -120,10 +120,11 @@ body {
   position: fixed;
   bottom: 20px;
   left: 20px;
-  width: 50vw;       /* 40% of screen width */
-  height: 20vh;      /* 30% of screen height */
-  background: transparent; /* fully transparent */
-  padding: 0;
+  width: 50vw;       /* 50% of screen width */
+  height: 30vh;      /* 30% of screen height */
+  background: rgba(255, 255, 255, 0.2); /* 20% transparent white */
+  padding: 10px;
+  border-radius: 8px;
   z-index: 5;
 }
 

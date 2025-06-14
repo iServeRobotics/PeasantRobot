@@ -91,6 +91,16 @@
   }
 }
 
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  z-index: -1; /* Push behind content */
+}
+
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);

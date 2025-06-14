@@ -116,6 +116,23 @@ body {
 }
 */
 
+#plot-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 300px;
+  background: transparent; /* fully transparent */
+  padding: 0;
+  z-index: 5;
+}
+
+#forceChart {
+  width: 100%;
+  height: auto;
+  background: transparent;
+}
+
+
 hr {
   margin: 1rem 0;
   color: inherit;

@@ -18,6 +18,8 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
     </head>
+    <!-- support plot (force data) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <body id="page-top">
         <video autoplay muted loop playsinline id="bg-video">
           <source src="assets/bg.mp4" type="video/mp4">
@@ -35,6 +37,11 @@
           z-index: 2;
           pointer-events: none;
         ">
+        </div>
+
+        <!-- plot (force data) -->
+        <div id="plot-container">
+          <canvas id="forceChart" width="300" height="150"></canvas>
         </div>
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
@@ -113,6 +120,59 @@
                 }
               }
             });
+        </script>
+        <script>
+            fetch('assets/force_x.csv')
+              .then(res => res.text())
+              .then(csv => {
+                const lines = csv.trim().split('\n').slice(1);
+                const time = [], values = [];
+
+                lines.forEach(line => {
+                  const [t, v] = line.split(',');
+                  time.push(parseFloat(t));
+                  values.push(parseFloat(v));
+                });
+
+                new Chart(document.getElementById('forceChart'), {
+                  type: 'line',
+                  data: {
+                    labels: time,
+                    datasets: [{
+                      label: '',
+                      data: values,
+                      borderColor: 'rgba(0, 200, 255, 1)',     // line color
+                      backgroundColor: 'transparent',          // no area fill
+                      pointRadius: 0,                          // set >0 for dots only
+                      borderWidth: 2,
+                      tension: 0.2                              // smooth curve
+                    }]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: { display: false }
+                    },
+                    scales: {
+                      x: {
+                        display: false,
+                        grid: { display: false }
+                      },
+                      y: {
+                        display: false,
+                        grid: { display: false }
+                      }
+                    },
+                    layout: {
+                      padding: 0
+                    },
+                    elements: {
+                      line: { fill: false }
+                    }
+                  }
+                });
+              });
         </script>
     </body>
 </html>

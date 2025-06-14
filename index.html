@@ -23,6 +23,19 @@
           <source src="assets/bg.mp4" type="video/mp4">
           Your browser does not support HTML5 video.
         </video>
+
+        <div id="video-overlay-text" style="
+          position: absolute;
+          top: 30%;
+          width: 100%;
+          text-align: center;
+          color: white;
+          font-size: 2rem;
+          font-weight: bold;
+          z-index: 2;
+          pointer-events: none;
+        ">
+        </div>
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container px-4 px-lg-5">
@@ -67,5 +80,35 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+        <!-- for text overlay video-->
+        <script>
+            const video = document.getElementById("bg-video");
+            const textContainer = document.getElementById("video-overlay-text");
+
+            // Define time -> message mappings
+            const textTimeline = [
+              { time: 0, text: "Peasant, a robot" },
+              { time: 1.5, text: "Lifts. Picks. Moves." },
+              { time: 3.0, text: "It works so you don't have to." },
+              { time: 5.0, text: "Powered by vision, built for labor." },
+              { time: 7.0, text: "" } // clear text
+            ];
+
+            let lastText = "";
+
+            video.addEventListener("timeupdate", () => {
+              const currentTime = video.currentTime;
+
+              for (let i = textTimeline.length - 1; i >= 0; i--) {
+                if (currentTime >= textTimeline[i].time) {
+                  if (lastText !== textTimeline[i].text) {
+                    textContainer.textContent = textTimeline[i].text;
+                    lastText = textTimeline[i].text;
+                  }
+                  break;
+                }
+              }
+            });
+        </script>
     </body>
 </html>

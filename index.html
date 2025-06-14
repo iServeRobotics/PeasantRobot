@@ -154,26 +154,17 @@
                     }]
                   },
                   options: {
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      animation: false,
-                      plugins: { legend: { display: false } },
-                      scales: {
-                        x: {
-                          display: false,
-                          grid: { display: false },
-                          min: 0,
-                          max: 16  // match CSV/video duration
-                        },
-                        y: {
-                          display: false,
-                          grid: { display: false },
-                          min: -1,  // set based on known value range
-                          max: 1
-                        }
-                      },
-                      elements: { line: { fill: false } }
-                    });
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                      x: { display: false, grid: { display: false } },
+                      y: { display: false, grid: { display: false } }
+                    },
+                    elements: { line: { fill: false } }
+                  }
+                });
 
                 // Update the plot as video plays
                 video.addEventListener("timeupdate", () => {

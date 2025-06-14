@@ -120,7 +120,8 @@ body {
   position: fixed;
   bottom: 20px;
   left: 20px;
-  width: 300px;
+  width: 50vw;       /* 40% of screen width */
+  height: 20vh;      /* 30% of screen height */
   background: transparent; /* fully transparent */
   padding: 0;
   z-index: 5;

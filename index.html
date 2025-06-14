@@ -39,6 +39,10 @@
         ">
         </div>
 
+        <div id="log-container">
+          <pre id="log-output"></pre>
+        </div>
+
         <!-- plot (force data) -->
         <div id="plot-container">
           <canvas id="forceChart" width="600" height="300"></canvas>
@@ -209,5 +213,31 @@
 
             });
         </script>
+        <script>
+        fetch('assets/robot.log')
+          .then(res => res.text())
+          .then(text => {
+            const lines = text.trim().split('\n');
+            const logOutput = document.getElementById('log-output');
+            const logContainer = document.getElementById('log-container');
+
+            let currentLine = 0;
+            let isPaused = false;
+
+            // Pause/resume on hover
+            logContainer.addEventListener('mouseenter', () => isPaused = true);
+            logContainer.addEventListener('mouseleave', () => isPaused = false);
+
+            setInterval(() => {
+              if (!isPaused && currentLine < lines.length) {
+                logOutput.textContent += lines[currentLine] + '\n';
+                currentLine++;
+                logOutput.scrollTop = logOutput.scrollHeight;
+              }
+            }, 200);  // adjust scroll speed here
+          });
+        </script>
+
+
     </body>
 </html>

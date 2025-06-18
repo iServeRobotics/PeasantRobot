@@ -137,8 +137,10 @@ body {
 
 #log-container {
   position: fixed;
-  bottom: 20px;
+  top: 50%;
   right: 20px;
+  transform: translateY(-50%); /* Shift it upward by 50% of its height */
+  
   width: 400px;
   height: 200px;
   overflow-y: auto;

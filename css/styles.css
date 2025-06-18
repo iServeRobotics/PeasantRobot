@@ -140,7 +140,7 @@ body {
   top: 50%;
   right: 20px;
   transform: translateY(-50%); /* Shift it upward by 50% of its height */
-  
+
   width: 400px;
   height: 200px;
   overflow-y: auto;
@@ -154,12 +154,22 @@ body {
   z-index: 10;
   pointer-events: auto;         /* ✅ allow user interaction */
   scrollbar-width: thin;
+
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none; /* Prevent interaction when hidden */
 }
 
 
 #log-output {
   margin: 0;
   white-space: pre-wrap;
+}
+
+
+#log-container.visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 

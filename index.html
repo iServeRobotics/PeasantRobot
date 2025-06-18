@@ -275,6 +275,22 @@
           });
         </script>
 
+        <script>
+          window.addEventListener('DOMContentLoaded', () => {
+            const logContainer = document.getElementById('log-container');
+
+            // Show after 2 seconds
+            setTimeout(() => {
+              logContainer.classList.add('visible');
+            }, 2000);
+
+            // Hide after 20 seconds
+            setTimeout(() => {
+              logContainer.classList.remove('visible');
+            }, 20000);
+          });
+        </script>
+
 
     </body>
 </html>

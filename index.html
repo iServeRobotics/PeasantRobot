@@ -144,7 +144,7 @@
             let time = [], values = [];
             let chart;
 
-            fetch("assets/force_x.csv")
+            fetch("assets/force_log.csv")
               .then(res => res.text())
               .then(csv => {
                 const lines = csv.trim().split('\n').slice(1);
@@ -311,7 +311,7 @@
 
             setTimeout(() => {
               forceLog.classList.remove('visible');
-            }, 32000);
+            }, 33000);
           });
         </script>
 

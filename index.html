@@ -274,8 +274,7 @@
             }, 100);  // adjust scroll speed here
           });
         </script>
-
-        <script>
+<!--         <script>
           window.addEventListener('DOMContentLoaded', () => {
             const logContainer = document.getElementById('log-container');
 
@@ -287,7 +286,32 @@
             // Hide after 20 seconds
             setTimeout(() => {
               logContainer.classList.remove('visible');
-            }, 20000);
+            }, 27000);
+          });
+        </script> -->
+        <!-- System log Visible between 2s and 28s, Force Visible between 30s and 35s -->
+        <script>
+          window.addEventListener('DOMContentLoaded', () => {
+            const logContainer = document.getElementById('log-container');
+            const forceLog = document.getElementById('force-log');
+
+            // Show log-container from 2s to 20s
+            setTimeout(() => {
+              logContainer.classList.add('visible');
+            }, 2000);
+
+            setTimeout(() => {
+              logContainer.classList.remove('visible');
+            }, 25000);
+
+            // Show force-log from 30s to 35s
+            setTimeout(() => {
+              forceLog.classList.add('visible');
+            }, 26000);
+
+            setTimeout(() => {
+              forceLog.classList.remove('visible');
+            }, 32000);
           });
         </script>
 

@@ -139,117 +139,112 @@
         <!-- for force data overlay video, synced with video-->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-            const canvas = document.getElementById("forceChart");
+          const canvas = document.getElementById("forceChart");
+          const video = document.querySelector("video");  // ✅ make sure this matches your actual video element
+          const forceLog = document.getElementById("force-log");
 
-            let time = [], values = [];
-            let chart;
+          let time = [], values = [], chart;
 
-            fetch("assets/force_log.csv")
-              .then(res => res.text())
-              .then(csv => {
-                const lines = csv.trim().split('\n').slice(1);
-                lines.forEach(line => {
-                  const [t, v] = line.split(',');
-                  time.push(parseFloat(t));
-                  values.push(parseFloat(v));
-                });
+          fetch("assets/force_log.csv")
+            .then(res => res.text())
+            .then(csv => {
+              const lines = csv.trim().split('\n').slice(1);
+              lines.forEach(line => {
+                const [t, v] = line.split(',');
+                time.push(parseFloat(t));
+                values.push(parseFloat(v));
+              });
 
-                chart = new Chart(canvas, {
-                  type: 'line',
-                  data: {
-                    labels: [],
-                    datasets: [{
-                      label: '',
-                      data: [],
-                      borderColor: 'rgba(0, 200, 255, 0.5)',
+              chart = new Chart(canvas, {
+                type: 'line',
+                data: {
+                  labels: [],
+                  datasets: [{
+                    label: '',
+                    data: [],
+                    borderColor: 'rgba(0, 200, 255, 0.5)',
+                    backgroundColor: 'transparent',
+                    pointRadius: 0,
+                    borderWidth: 2,
+                    tension: 0.2
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  animation: false,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                    x: {
+                      type: 'linear',
+                      min: 0,
+                      max: 40,
+                      display: true,
+                      grid: { display: true, color: 'rgba(0, 0, 0, 0.1)' },
+                      ticks: { color: '#333', font: { size: 10 } }
+                    },
+                    y: {
+                      type: 'linear',
+                      min: -0.5,
+                      max: 6.5,
+                      display: true,
+                      grid: { display: true, color: 'rgba(0, 0, 0, 0.1)' },
+                      ticks: { color: '#333', font: { size: 10 } }
+                    }
+                  },
+                  elements: { line: { fill: false } }
+                }
+              });
+
+              video.addEventListener("timeupdate", () => {
+                const t = video.currentTime;
+
+                // Show/hide chart container
+                if (t >= 26 && t <= 33) {
+                  forceLog.classList.add("visible");
+                } else {
+                  forceLog.classList.remove("visible");
+                }
+
+                // Find data up to current time
+                const idx = time.findIndex(val => val > t);
+                const clippedIdx = idx === -1 ? time.length : idx;
+
+                const pastTime = time.slice(0, clippedIdx);
+                const pastValues = values.slice(0, clippedIdx);
+
+                const currentTime = pastTime.at(-1);
+                const currentValue = pastValues.at(-1);
+
+                chart.data = {
+                  labels: pastTime,
+                  datasets: [
+                    {
+                      label: 'force x',
+                      data: pastValues,
+                      borderColor: 'rgba(0, 100, 255, 0.8)',
                       backgroundColor: 'transparent',
                       pointRadius: 0,
                       borderWidth: 2,
                       tension: 0.2
-                    }]
-                  },
-                  options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                      x: {
-                        type: 'linear',
-                        min: 0,
-                        max: 16,
-                        display: true,
-                        grid: {
-                          display: true,
-                          color: 'rgba(0, 0, 0, 0.1)'  // subtle grid lines
-                        },
-                        ticks: {
-                          color: '#333',
-                          font: { size: 10 }
-                        }
-                      },
-                      y: {
-                        type: 'linear',
-                        min: -1,
-                        max: 1,
-                        display: true,
-                        grid: {
-                          display: true,
-                          color: 'rgba(0, 0, 0, 0.1)'
-                        },
-                        ticks: {
-                          color: '#333',
-                          font: { size: 10 }
-                        }
-                      }
                     },
-                    elements: { line: { fill: false } }
-                  }
-                });
+                    {
+                      label: '',
+                      data: currentTime !== undefined ? [{ x: currentTime, y: currentValue }] : [],
+                      borderColor: 'transparent',
+                      backgroundColor: 'rgba(255, 69, 0, 1)',
+                      pointRadius: 3,
+                      pointStyle: 'circle',
+                      showLine: false
+                    }
+                  ]
+                };
 
-                // Update the plot as video plays
-                video.addEventListener("timeupdate", () => {
-                    const t = video.currentTime;
-                    const idx = time.findIndex(val => val > t);
-                    const clippedIdx = idx === -1 ? time.length : idx;
-
-                    // past values (line)
-                    const pastTime = time.slice(0, clippedIdx);
-                    const pastValues = values.slice(0, clippedIdx);
-
-                    // current point (last one shown)
-                    const currentTime = pastTime.at(-1);
-                    const currentValue = pastValues.at(-1);
-
-                    chart.data = {
-                    labels: pastTime,
-                    datasets: [
-                      {
-                        label: 'force x',
-                        data: pastValues,
-                        borderColor: 'rgba(0, 100, 255, 0.8)',  // deep blue, semi-transparent
-                        backgroundColor: 'transparent',
-                        pointRadius: 0,
-                        borderWidth: 2,
-                        tension: 0.2
-                      },
-                      {
-                        label: '',
-                        data: [{ x: currentTime, y: currentValue }],
-                        borderColor: 'transparent',
-                        backgroundColor: 'rgba(255, 69, 0, 1)',  // bright red-orange
-                        pointRadius: 3,
-                        pointStyle: 'circle',
-                        showLine: false
-                      }
-                    ]
-                    };
-
-                    chart.update();
-                    });
-
+                chart.update();
+              });
             });
         </script>
+
         <script>
         fetch('assets/robot.log')
           .then(res => res.text())
@@ -290,7 +285,7 @@
           });
         </script> -->
         <!-- System log Visible between 2s and 28s, Force Visible between 30s and 35s -->
-        <script>
+     <!--    <script>
           window.addEventListener('DOMContentLoaded', () => {
             const logContainer = document.getElementById('log-container');
             const forceLog = document.getElementById('force-log');
@@ -313,7 +308,7 @@
               forceLog.classList.remove('visible');
             }, 33000);
           });
-        </script>
+        </script> -->
 
 
     </body>

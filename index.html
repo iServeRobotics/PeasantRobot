@@ -288,7 +288,7 @@
         <script>
           window.addEventListener('DOMContentLoaded', () => {
             const logContainer = document.getElementById('log-container');
-            const forceLog = document.getElementById('force-log');
+            // const forceLog = document.getElementById('force-log');
 
             // Show log-container from 2s to 20s
             setTimeout(() => {
@@ -300,15 +300,75 @@
             }, 25000);
 
             // Show force-log from 30s to 35s
-            setTimeout(() => {
-              forceLog.classList.add('visible');
-            }, 26000);
+            // setTimeout(() => {
+            //   forceLog.classList.add('visible');
+            // }, 26000);
 
-            setTimeout(() => {
-              forceLog.classList.remove('visible');
-            }, 33000);
+            // setTimeout(() => {
+            //   forceLog.classList.remove('visible');
+            // }, 33000);
           });
         </script>
+
+        <script>
+        const forceData = [
+          {"time": 26.0, "force": 0.1},
+          {"time": 26.2, "force": -0.1},
+          {"time": 26.4, "force": 0.0},
+          {"time": 26.6, "force": 0.2},
+          {"time": 26.8, "force": 0.0},
+
+          {"time": 27.0, "force": 1.0},
+          {"time": 27.2, "force": -0.2},
+          {"time": 27.4, "force": 2.8},
+          {"time": 27.6, "force": -0.3},
+          {"time": 27.8, "force": 3.5},
+          {"time": 28.0, "force": 0.4},
+          {"time": 28.2, "force": 4.0},
+          {"time": 28.4, "force": -0.5},
+          {"time": 28.6, "force": 2.0},
+          {"time": 28.8, "force": -0.1},
+          {"time": 29.0, "force": 1.2},
+
+          {"time": 29.2, "force": 2.0},
+          {"time": 29.4, "force": 2.8},
+          {"time": 29.6, "force": 3.6},
+          {"time": 29.8, "force": 4.3},
+          {"time": 30.0, "force": 4.9},
+          {"time": 30.2, "force": 5.3},
+          {"time": 30.4, "force": 5.6},
+          {"time": 30.6, "force": 5.8},
+          {"time": 30.8, "force": 6.0},
+          {"time": 31.0, "force": 6.1},
+
+          {"time": 31.2, "force": 4.0},
+          {"time": 31.4, "force": 2.5},
+          {"time": 31.6, "force": 1.0},
+          {"time": 31.8, "force": 0.5},
+          {"time": 32.0, "force": 0.2},
+          {"time": 32.2, "force": 0.1},
+          {"time": 32.4, "force": 0.0},
+          {"time": 32.6, "force": -0.1},
+          {"time": 32.8, "force": 0.0},
+          {"time": 33.0, "force": 0.0}        
+        ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+          const forceLog = document.getElementById('force-log');
+
+          // Show at 30s
+          setTimeout(() => {
+            forceLog.classList.add('visible');
+            // Render force log
+            forceLog.innerText = forceData.map(d => `t=${d.time.toFixed(1)}s → ${d.force.toFixed(2)}N`).join('\n');
+          }, 30000);
+
+          // Hide at 35s
+          setTimeout(() => {
+            forceLog.classList.remove('visible');
+          }, 35000);
+        });
+      </script>
 
 
     </body>
